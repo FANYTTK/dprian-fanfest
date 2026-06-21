@@ -157,6 +157,7 @@ function requireLoginThen(action) {
 }
 
 $('#heroUploadBtn').addEventListener('click', () => requireLoginThen(() => openModal('uploadModal')));
+$('#emptyUploadBtn') && $('#emptyUploadBtn').addEventListener('click', () => requireLoginThen(() => openModal('uploadModal')));
 $('#heroExploreBtn').addEventListener('click', () => {
   $('#gallery').scrollIntoView({ behavior: 'smooth' });
 });
@@ -244,6 +245,7 @@ async function loadEvents() {
   try {
     const events = await api('/posts/events');
     state.events = events;
+    const sE2 = document.getElementById("statEvents"); if (sE2) sE2.textContent = events.length || "0";
     const select = $('#eventFilter');
     const current = select.value;
     select.innerHTML = '<option value="">Todos los eventos</option>' +
@@ -284,6 +286,9 @@ function escapeHtml(str) {
 }
 
 function renderWall() {
+  // update hero stats
+  const sP = document.getElementById("statPosts"); if (sP) sP.textContent = state.posts.length || "0";
+  const sE = document.getElementById("statEvents"); if (sE) sE.textContent = state.events.length || "0";
   const grid = $('#wallGrid');
   const empty = $('#wallEmpty');
 
@@ -345,6 +350,10 @@ function openLightbox(id) {
 
   const isOwner = state.user && post.uploader === state.user.id;
 
+  // Generar nombre de descarga limpio
+  const ext = post.type === 'video' ? 'mp4' : 'jpg';
+  const filename = `dprian-fanfest_${escapeHtml(post.event).replace(/\s+/g, '-')}_${post._id.slice(-6)}.${ext}`;
+
   $('#lightboxBody').innerHTML = `
     <div class="frame-full">
       ${post.type === 'video'
@@ -356,9 +365,40 @@ function openLightbox(id) {
       <span>${formatDate(post.eventDate)}</span>
     </div>
     <p class="lightbox-caption">${escapeHtml(post.caption) || '<em>Sin descripción</em>'}</p>
-    <span class="event-tag" style="display:inline-block;margin-bottom:14px;">${escapeHtml(post.event)}</span>
-    ${isOwner ? `<button class="btn btn-ghost" id="deletePostBtn" style="width:100%;color:#ffb3c9;">🗑 Borrar publicación</button>` : ''}
+    <span class="event-tag-lb"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> ${escapeHtml(post.event)}</span>
+    <div class="lightbox-actions">
+      <button class="btn btn-ghost" id="downloadBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Descargar
+      </button>
+      ${isOwner ? `<button class="btn-danger-ghost" id="deletePostBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>Borrar publicación</button>` : ''}
+    </div>
   `;
+
+  // Descarga: fetch como blob para forzar descarga en vez de abrir en nueva pestaña
+  $('#downloadBtn').addEventListener('click', async () => {
+    const btn = $('#downloadBtn');
+    btn.textContent = 'Descargando…';
+    btn.disabled = true;
+    try {
+      const res = await fetch(post.url);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('¡Descarga iniciada! 🎉');
+    } catch {
+      // Fallback: abrir en nueva pestaña
+      window.open(post.url, '_blank');
+      showToast('Abriendo en nueva pestaña…');
+    } finally {
+      btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar';
+      btn.disabled = false;
+    }
+  });
 
   if (isOwner) {
     $('#deletePostBtn').addEventListener('click', () => deletePost(post._id));

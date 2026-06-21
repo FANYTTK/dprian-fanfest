@@ -5,70 +5,142 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DPRIAN Fanfest — Muro de la fanbase</title>
 <meta name="description" content="Sube y mira fotos y videos del Fanfest de DPRIAN, subidos por la fanbase." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap" />
 <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
 
-  <!-- ===== Barra superior ===== -->
+  <!-- ===== Topbar ===== -->
   <header class="topbar">
-    <div class="brand">DPRIAN<span>FANFEST</span><small>· muro de la fanbase</small></div>
+    <a class="brand" href="/">
+      <svg class="brand-icon" width="30" height="30" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="14" cy="14" r="12.5" stroke="var(--red)" stroke-width="1.5"/>
+        <path d="M9 10 L14 7 L19 10 L19 18 L14 21 L9 18 Z" fill="none" stroke="var(--red)" stroke-width="1.2"/>
+        <circle cx="14" cy="14" r="2" fill="var(--red)"/>
+      </svg>
+      <span class="brand-name">DPRIAN<em>FANFEST</em></span>
+      <span class="brand-tag">Edición de la fanbase</span>
+    </a>
     <div class="auth-area" id="authArea">
-      <!-- JS llena esto: o botones de login/registro, o el chip de usuario -->
+      <!-- JS rellena esto -->
     </div>
   </header>
 
-  <!-- ===== Hero ===== -->
+  <!-- ===== Hero / Portada ===== -->
   <section class="hero">
-    <div class="hero-collage" id="heroCollage" aria-hidden="true"></div>
+    <div class="hero-bg" aria-hidden="true">
+      <div class="hero-collage" id="heroCollage"></div>
+      <div class="grain"></div>
+    </div>
+
     <div class="hero-content">
-      <p class="hero-eyebrow">Hecho por fans, para fans</p>
-      <h1>EL MURO DE<br /><span class="alt">RECUERDOS</span></h1>
-      <p>Cada foto y video del Fanfest, subidos por la propia fanbase. Busca por evento, por fecha, o solo explora.</p>
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Número especial · Hecho por hell.fanyy en instagram
+      </div>
+      <h1>EL MURO DE<br /><mark>RECUERDOS</mark></h1>
+      <p class="hero-rule" aria-hidden="true">✦ ✦ ✦</p>
+      <p class="hero-sub">Cada foto y video del Fanfest, grabado y tomado con amor.<br/>Busca por evento, por fecha, o simplemente hojea el muro.</p>
+
       <div class="hero-actions">
-        <button class="btn btn-primary" id="heroUploadBtn">📸 Subir foto o video</button>
-        <button class="btn btn-ghost" id="heroExploreBtn">Ver el muro</button>
+        <button class="btn btn-primary" id="heroUploadBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          Pegar un recuerdo
+        </button>
+        <button class="btn btn-ghost" id="heroExploreBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Hojear el muro
+        </button>
+      </div>
+
+      <div class="hero-stats" id="heroStats">
+        <div class="stat">
+          <span class="stat-num" id="statPosts">—</span>
+          <span class="stat-label">recuerdos</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat">
+          <span class="stat-num" id="statEvents">—</span>
+          <span class="stat-label">eventos</span>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ===== Filtros ===== -->
   <section class="filters" id="gallery">
-    <div class="search-wrap">
-      <input type="search" id="searchInput" placeholder="🔍 Buscar por descripción, evento o nombre..." />
+    <div class="filters-inner">
+      <p class="filters-kicker">Buscar en el archivo</p>
+      <div class="filter-search">
+        <svg class="filter-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="searchInput" placeholder="Buscar por descripción, evento o nombre…" />
+      </div>
+
+      <div class="filter-row">
+        <label class="filter-label">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7H4M16 3H8M12 21V7"/></svg>
+          <select id="eventFilter">
+            <option value="">Todos los eventos</option>
+          </select>
+        </label>
+
+        <label class="filter-label">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <input type="date" id="fromDate" title="Desde" />
+        </label>
+
+        <span class="filter-sep">—</span>
+
+        <label class="filter-label">
+          <input type="date" id="toDate" title="Hasta" />
+        </label>
+
+        <button class="btn-clear" id="clearFiltersBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          Limpiar
+        </button>
+      </div>
     </div>
-    <select id="eventFilter">
-      <option value="">Todos los eventos</option>
-    </select>
-    <div class="date-group">
-      <label for="fromDate">Desde</label>
-      <input type="date" id="fromDate" />
-    </div>
-    <div class="date-group">
-      <label for="toDate">Hasta</label>
-      <input type="date" id="toDate" />
-    </div>
-    <button class="btn btn-text" id="clearFiltersBtn">Limpiar filtros</button>
   </section>
 
-  <!-- ===== Muro de fotos ===== -->
+  <!-- ===== Muro ===== -->
   <main class="wall">
     <div class="wall-grid" id="wallGrid"></div>
     <div class="wall-empty" id="wallEmpty" hidden>
+      <svg width="52" height="52" viewBox="0 0 56 56" fill="none"><rect x="8" y="8" width="40" height="40" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".5"/><circle cx="20" cy="22" r="3" stroke="currentColor" stroke-width="1.5" opacity=".5"/><path d="M8 36l10-9 8 7 6-5 16 12" stroke="currentColor" stroke-width="1.5" opacity=".5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <strong>Todavía no hay nada aquí</strong>
-      Sé el primero en pegar un recuerdo en el muro.
+      <p>Sé el primero en pegar un recuerdo en el muro.</p>
+      <button class="btn btn-primary" id="emptyUploadBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Subir ahora
+      </button>
     </div>
   </main>
 
   <footer class="site-footer">
-    Hecho con cariño por la fanbase de DPRIAN 💜
+    <span class="footer-mark">✦</span>
+    Hecho con cariño por hell.fanyy una fan de DPRIAN
+    <span class="footer-mark">✦</span>
   </footer>
 
-  <!-- ===== Modal: Login / Registro ===== -->
+  <!-- ===== Modal: Auth ===== -->
   <div class="modal-overlay" id="authModal" hidden>
-    <div class="modal">
-      <button class="modal-close" data-close="authModal" aria-label="Cerrar">✕</button>
-      <h2 id="authModalTitle">Inicia sesión</h2>
-      <p class="sub">Necesitas una cuenta para subir fotos y videos.</p>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+      <button class="modal-close" data-close="authModal" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="modal-header">
+        <div class="modal-icon modal-icon--auth">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <h2 id="authModalTitle">Inicia sesión</h2>
+          <p class="sub">Necesitas una cuenta para subir fotos y videos.</p>
+        </div>
+      </div>
 
       <div class="tabs">
         <button class="tab-btn active" id="tabLogin" type="button">Iniciar sesión</button>
@@ -80,75 +152,128 @@
       <!-- Login -->
       <form id="loginForm">
         <div class="field">
-          <label for="loginEmail">Correo</label>
-          <input type="email" id="loginEmail" required autocomplete="email" />
+          <label for="loginEmail">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            Correo
+          </label>
+          <input type="email" id="loginEmail" required autocomplete="email" placeholder="tu@correo.com" />
         </div>
         <div class="field">
-          <label for="loginPassword">Contraseña</label>
-          <input type="password" id="loginPassword" required autocomplete="current-password" />
+          <label for="loginPassword">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Contraseña
+          </label>
+          <input type="password" id="loginPassword" required autocomplete="current-password" placeholder="••••••••" />
         </div>
-        <button class="btn btn-primary" type="submit">Entrar</button>
+        <button class="btn btn-primary" type="submit">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Entrar
+        </button>
       </form>
 
       <!-- Registro -->
       <form id="registerForm" hidden>
         <div class="field">
-          <label for="regName">Nombre</label>
-          <input type="text" id="regName" required maxlength="60" />
+          <label for="regName">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Nombre
+          </label>
+          <input type="text" id="regName" required maxlength="60" placeholder="Tu nombre de fan" />
         </div>
         <div class="field">
-          <label for="regEmail">Correo</label>
-          <input type="email" id="regEmail" required autocomplete="email" />
+          <label for="regEmail">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+            Correo
+          </label>
+          <input type="email" id="regEmail" required autocomplete="email" placeholder="tu@correo.com" />
         </div>
         <div class="field">
-          <label for="regPassword">Contraseña (mínimo 6 caracteres)</label>
-          <input type="password" id="regPassword" required minlength="6" autocomplete="new-password" />
+          <label for="regPassword">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Contraseña <span class="field-hint">(mínimo 6 caracteres)</span>
+          </label>
+          <input type="password" id="regPassword" required minlength="6" autocomplete="new-password" placeholder="••••••••" />
         </div>
-        <button class="btn btn-primary" type="submit">Crear cuenta</button>
+        <button class="btn btn-primary" type="submit">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          Crear cuenta
+        </button>
       </form>
     </div>
   </div>
 
-  <!-- ===== Modal: Subir foto/video ===== -->
+  <!-- ===== Modal: Subir ===== -->
   <div class="modal-overlay" id="uploadModal" hidden>
-    <div class="modal">
-      <button class="modal-close" data-close="uploadModal" aria-label="Cerrar">✕</button>
-      <h2>Pega un recuerdo</h2>
-      <p class="sub">Sube una foto o video del Fanfest.</p>
+    <div class="modal" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close="uploadModal" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="modal-header">
+        <div class="modal-icon modal-icon--upload">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div>
+          <h2>Pega un recuerdo</h2>
+          <p class="sub">Sube una foto o video del Fanfest.</p>
+        </div>
+      </div>
 
       <p class="form-error" id="uploadError" hidden></p>
 
       <form id="uploadForm">
         <div class="dropzone" id="dropzone">
-          <span id="dropzoneText">Arrastra una foto o video, o haz clic para elegir</span>
+          <div class="dropzone-inner">
+            <svg class="dropzone-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span id="dropzoneText">Arrastra aquí o <u>haz clic para elegir</u></span>
+            <span class="dropzone-hint">Fotos y videos — máx. 50 MB</span>
+          </div>
           <input type="file" id="fileInput" accept="image/*,video/*" required />
         </div>
+
         <div class="field">
-          <label for="eventInput">Evento</label>
+          <label for="eventInput">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Evento
+          </label>
           <input type="text" id="eventInput" placeholder="Ej. Fanfest CDMX 2026" required maxlength="80" />
         </div>
+
         <div class="field">
-          <label for="eventDateInput">Fecha del evento</label>
+          <label for="eventDateInput">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Fecha del evento
+          </label>
           <input type="date" id="eventDateInput" required />
         </div>
+
         <div class="field">
-          <label for="captionInput">Descripción (opcional)</label>
+          <label for="captionInput">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Descripción <span class="field-hint">(opcional)</span>
+          </label>
           <textarea id="captionInput" maxlength="280" placeholder="¿Qué está pasando en esta foto?"></textarea>
         </div>
-        <button class="btn btn-amber" type="submit" id="uploadSubmitBtn">Subir al muro</button>
+
+        <button class="btn btn-amber" type="submit" id="uploadSubmitBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Subir al muro
+        </button>
       </form>
     </div>
   </div>
 
-  <!-- ===== Modal: Lightbox (ver publicación completa) ===== -->
+  <!-- ===== Modal: Lightbox ===== -->
   <div class="modal-overlay" id="lightboxModal" hidden>
-    <div class="modal modal-wide">
-      <button class="modal-close" data-close="lightboxModal" aria-label="Cerrar">✕</button>
+    <div class="modal modal-wide" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close="lightboxModal" aria-label="Cerrar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
       <div class="lightbox-body" id="lightboxBody"></div>
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="/js/app.js"></script>
 </body>
