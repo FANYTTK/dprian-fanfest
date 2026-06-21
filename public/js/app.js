@@ -389,7 +389,7 @@ function openLightbox(id) {
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
-      showToast('¡Descarga iniciada! 🎉');
+      showToast('¡Descarga iniciada! ');
     } catch {
       // Fallback: abrir en nueva pestaña
       window.open(post.url, '_blank');
